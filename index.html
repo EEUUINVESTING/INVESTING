@@ -1,1 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>NVDIATES</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+
+:root{
+ --yellow:#ffd700;
+}
+
+body{
+ display:flex;
+ background:#000;
+ color:white;
+ height:100vh;
+}
+
+/* SIDEBAR */
+nav{
+ width:220px;
+ background:#000;
+ border-right:1px solid #ffd70033;
+ padding:15px;
+}
+
+.logo{
+ color:#ffd700;
+ font-weight:bold;
+ margin-bottom:15px;
+}
+
+nav button{
+ width:100%;
+ margin:5px 0;
+ padding:10px;
+ background:none;
+ border:none;
+ color:#ccc;
+ text-align:left;
+ cursor:pointer;
+}
+nav button:hover{
+ color:#ffd700;
+}
+
+/* MAIN */
+.main{
+ flex:1;
+ display:flex;
+ flex-direction:column;
+}
+
+/* TOPBAR */
+.topbar{
+ background:#111;
+ padding:15px;
+ display:flex;
+ justify-content:space-between;
+ border-bottom:1px solid #ffd70022;
+}
+
+/* CONTENT */
+.content{
+ flex:1;
+ padding:20px;
+ overflow:auto;
+}
+
+.panel{display:none;}
+
+.grid{
+ display:grid;
+ grid-template-columns:2fr 1fr;
+ gap:15px;
+}
+
+.card{
+ background:#111;
+ padding:15px;
+ border-radius:10px;
+ margin-bottom:10px;
+}
+
+button{
+ background:#ffd700;
+ border:none;
+ padding:10px;
+ border-radius:6px;
+ cursor:pointer;
+}
+
+input{
+ padding:10px;
+ width:100%;
+ margin:5px 0;
+ border:none;
+ border-radius:6px;
+}
+
+/* HISTORIAL */
+#historial div{
+ background:#222;
+ padding:6px;
+ margin:5px 0;
+ border-radius:5px;
+}
+
+/* TICKER */
+#ticker{
+ position:absolute;
+ bottom:0;
+ left:220px;
+ width:calc(100% - 220px);
+ background:#000;
+ color:#ffd700;
+ padding:8px;
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<div class="logo">NVDIATES</div>
+<button onclick="show('dashboard')">📊 Dashboard</button>
+<button onclick="show('plans')">💼 Planes</button>
+<button onclick="show('perfil')">👤 Perfil</button>
+<button onclick="show('soporte')">📞 Soporte</button>
+<button onclick="show('login')">🔐 Login</button>
+</nav>
+
+<div class="main">
+
+<div class="topbar">
+<span>Broker Panel</span>
+<span id="balanceTop">S/23,454.56</span>
+</div>
+
+<div class="content">
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="panel">
+
+<div class="grid">
+
+<div class="card">
+<h3>Gráfico</h3>
+<canvas id="chart1"></canvas>
+</div>
+
+<div class="card">
+<h3>Operaciones</h3>
+
+<p>Saldo: <span id="saldoTxt">S/23,454.56</span></p>
+
+<input id="amount" placeholder="Monto">
+
+<button onclick="deposit()">Depositar</button>
+<button onclick="handleRetiro()">Retirar</button>
+
+<p id="timerPlan">Sistema activo</p>
+
+</div>
+
+</div>
+
+<h3>Historial</h3>
+<div id="historial"></div>
+
+</div>
+
+<!-- PLANES -->
+<div id="plans" class="panel">
+<h2>Planes</h2>
+<button onclick="selectPlan(1500)">Plan 1500</button>
+<button onclick="selectPlan(700)">Plan 700</button>
+<button onclick="selectPlan(5000)">VIP</button>
+</div>
+
+<!-- PERFIL -->
+<div id="perfil" class="panel">
+<h2>Perfil</h2>
+<p>Usuario: MARILUZ QUISPE HUAMAN</p>
+<p>Correo: Mariluzquispehuaman554@gmail.com</p>
+<p>Estado: Activo</p>
+<p>ID: 586476446</p>
+<p>Plan: S/ 600.00</p>
+<p>CODIGO PARA RECARGAR 64554547...</p>
+</div>
+
+<!-- SOPORTE -->
+<div id="soporte" class="panel">
+<h2>Soporte</h2>
+<p>📧 soporte@nvidiates.com</p>
+<p>📱 +1 3246 8545 </p>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="panel">
+<h2>Login</h2>
+<input placeholder="Usuario">
+<input type="password">
+<button onclick="login()">Entrar</button>
+</div>
+
+</div>
+</div>
+
+<div id="ticker">Cargando mercado...</div>
+
+<script>
+let chart;
+let saldo = 1954.25;
+
+/* NAV */
+function show(id){
+ document.querySelectorAll(".panel").forEach(p=>p.style.display="none");
+ document.getElementById(id).style.display="block";
+ if(id==="dashboard") setTimeout(initChart,200);
+}
+
+/* CHART */
+function initChart(){
+ if(chart) return;
+
+ let data=[];
+ for(let i=0;i<40;i++) data.push(100+Math.random()*10);
+
+ chart=new Chart(document.getElementById("chart1"),{
+  type:"line",
+  data:{
+   labels:data.map((_,i)=>i),
+   datasets:[{
+    data:data,
+    borderColor:"#ffd700"
+   }]
+  }
+ });
+
+ setInterval(()=>{
+  let last=data[data.length-1];
+  data.push(last+(Math.random()-0.5)*2);
+  data.shift();
+  chart.update();
+ },1000);
+}
+
+/* HISTORIAL S/869.58 en retiros */
+function addHist(msg){
+ let historial = JSON.parse(localStorage.getItem("historial")) || [];
+ historial.unshift(msg);
+ localStorage.setItem("historial", JSON.stringify(historial));
+ renderHist();
+}
+
+function renderHist(){
+ let cont = document.getElementById("historial");
+ cont.innerHTML = "";
+ let historial = JSON.parse(localStorage.getItem("historial")) || [];
+
+ historial.forEach(item=>{
+  let d=document.createElement("div");
+  d.innerText=item;
+  cont.appendChild(d);
+ });
+}
+
+/* DEPÓSITO */
+function deposit(){
+ let m=parseFloat(document.getElementById("amount").value);
+ if(!m) return alert("Ingresa monto");
+
+ saldo += m;
+ updateSaldo();
+
+ addHist("🟢 Depósito S/"+m+" - Confirmado");
+}
+
+/* RETIRO */
+function handleRetiro(){
+ let m=parseFloat(document.getElementById("amount").value);
+ if(!m) return alert("Ingresa monto");
+
+ if(m > saldo){
+  alert("Saldo insuficiente");
+  return;
+ }
+
+ saldo -= m;
+ updateSaldo();
+
+ addHist("🔻 Retiro S/"+m+" - Procesado");
+
+ document.getElementById("timerPlan").innerText =
+ "Retiro procesado correctamente";
+}
+
+/* PLAN */
+function selectPlan(m){
+ addHist("💼 Plan activado S/"+m);
+}
+
+/* SALDO */
+function updateSaldo(){
+ document.getElementById("saldoTxt").innerText = saldo.toFixed(2);
+ document.getElementById("balanceTop").innerText = "S/"+saldo.toFixed(2);
+}
+
+/* LOGIN */
+function login(){
+ show("dashboard");
+}
+
+/* TICKER */
+setInterval(()=>{
+ let activos=["BTC","ETH","GOLD","NASDAQ"];
+ let t=activos[Math.floor(Math.random()*activos.length)];
+ let p=(Math.random()*10000).toFixed(2);
+ document.getElementById("ticker").innerText=t+" $"+p;
+},2000);
+
+/* CARGAR HISTORIAL */
+window.addEventListener("load",()=>{
+ renderHist();
+});
+
+show("dashboard");
+</script>
+
+</body>
+</html>
