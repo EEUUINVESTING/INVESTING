@@ -4,10 +4,16 @@
 <meta charset="UTF-8">
 <title>NVDIATES</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+*{
+ margin:0;
+ padding:0;
+ box-sizing:border-box;
+ font-family:Arial;
+}
 
 :root{
  --yellow:#ffd700;
@@ -18,6 +24,7 @@ body{
  background:#000;
  color:white;
  height:100vh;
+ overflow:hidden;
 }
 
 /* SIDEBAR */
@@ -32,20 +39,25 @@ nav{
  color:#ffd700;
  font-weight:bold;
  margin-bottom:15px;
+ font-size:22px;
 }
 
 nav button{
  width:100%;
  margin:5px 0;
- padding:10px;
+ padding:12px;
  background:none;
  border:none;
  color:#ccc;
  text-align:left;
  cursor:pointer;
+ border-radius:8px;
+ transition:0.2s;
 }
+
 nav button:hover{
  color:#ffd700;
+ background:#111;
 }
 
 /* MAIN */
@@ -62,6 +74,7 @@ nav button:hover{
  display:flex;
  justify-content:space-between;
  border-bottom:1px solid #ffd70022;
+ font-weight:bold;
 }
 
 /* CONTENT */
@@ -71,8 +84,11 @@ nav button:hover{
  overflow:auto;
 }
 
-.panel{display:none;}
+.panel{
+ display:none;
+}
 
+/* GRID */
 .grid{
  display:grid;
  grid-template-columns:2fr 1fr;
@@ -82,43 +98,104 @@ nav button:hover{
 .card{
  background:#111;
  padding:15px;
- border-radius:10px;
+ border-radius:12px;
  margin-bottom:10px;
+ border:1px solid #222;
 }
 
+.card h3{
+ margin-bottom:15px;
+ color:#ffd700;
+}
+
+/* BOTONES */
 button{
  background:#ffd700;
  border:none;
  padding:10px;
- border-radius:6px;
+ border-radius:8px;
  cursor:pointer;
+ font-weight:bold;
+ margin-top:5px;
 }
 
+button:hover{
+ opacity:0.9;
+}
+
+/* INPUT */
 input{
- padding:10px;
+ padding:12px;
  width:100%;
  margin:5px 0;
  border:none;
- border-radius:6px;
+ border-radius:8px;
+ background:#222;
+ color:white;
 }
 
 /* HISTORIAL */
 #historial div{
  background:#222;
- padding:6px;
+ padding:10px;
  margin:5px 0;
- border-radius:5px;
+ border-radius:8px;
+ border-left:3px solid #ffd700;
 }
 
 /* TICKER */
 #ticker{
- position:absolute;
+ position:fixed;
  bottom:0;
  left:220px;
  width:calc(100% - 220px);
  background:#000;
  color:#ffd700;
- padding:8px;
+ padding:10px;
+ border-top:1px solid #222;
+ font-weight:bold;
+}
+
+/* MODAL */
+.modal{
+ position:fixed;
+ top:0;
+ left:0;
+ width:100%;
+ height:100%;
+ background:rgba(0,0,0,0.8);
+ display:none;
+ justify-content:center;
+ align-items:center;
+ z-index:999;
+}
+
+.modal-content{
+ background:#111;
+ padding:25px;
+ border-radius:12px;
+ width:350px;
+ text-align:center;
+ border:1px solid #ffd70033;
+}
+
+.modal-content h2{
+ color:#ffd700;
+ margin-bottom:10px;
+}
+
+.modal-content p{
+ margin-bottom:20px;
+ color:#ccc;
+}
+
+.modal-buttons{
+ display:flex;
+ gap:10px;
+}
+
+.modal-buttons button{
+ flex:1;
 }
 </style>
 </head>
@@ -126,19 +203,22 @@ input{
 <body>
 
 <nav>
+
 <div class="logo">NVDIATES</div>
+
 <button onclick="show('dashboard')">📊 Dashboard</button>
 <button onclick="show('plans')">💼 Planes</button>
 <button onclick="show('perfil')">👤 Perfil</button>
 <button onclick="show('soporte')">📞 Soporte</button>
 <button onclick="show('login')">🔐 Login</button>
+
 </nav>
 
 <div class="main">
 
 <div class="topbar">
 <span>Broker Panel</span>
-<span id="balanceTop">S/23,454.56</span>
+<span id="balanceTop">S/26,54.25</span>
 </div>
 
 <div class="content">
@@ -149,142 +229,310 @@ input{
 <div class="grid">
 
 <div class="card">
-<h3>Gráfico</h3>
+<h3>📈 Gráfico en Tiempo Real</h3>
 <canvas id="chart1"></canvas>
 </div>
 
 <div class="card">
+
 <h3>Operaciones</h3>
 
-<p>Saldo: <span id="saldoTxt">S/23,454.56</span></p>
+<p>Saldo:</p>
+<h2 id="saldoTxt">S/26,54.25</h2>
 
-<input id="amount" placeholder="Monto">
+<input id="amount" placeholder="Ingrese monto">
 
 <button onclick="deposit()">Depositar</button>
-<button onclick="handleRetiro()">Retirar</button>
 
-<p id="timerPlan">Sistema activo</p>
+<button onclick="openRetiroModal()">Retirar</button>
+
+<p id="timerPlan" style="margin-top:15px;color:#ffd700;">
+Sistema activo
+</p>
 
 </div>
 
 </div>
 
-<h3>Historial</h3>
+<h3 style="margin-top:20px;">📋 Historial</h3>
+
 <div id="historial"></div>
 
 </div>
 
 <!-- PLANES -->
 <div id="plans" class="panel">
-<h2>Planes</h2>
+
+<h2 style="margin-bottom:20px;">Planes</h2>
+
 <button onclick="selectPlan(1500)">Plan 1500</button>
 <button onclick="selectPlan(700)">Plan 700</button>
 <button onclick="selectPlan(5000)">VIP</button>
+
 </div>
 
 <!-- PERFIL -->
 <div id="perfil" class="panel">
+
 <h2>Perfil</h2>
+
+<br>
+
 <p>Usuario: MARILUZ QUISPE HUAMAN</p>
 <p>Correo: Mariluzquispehuaman554@gmail.com</p>
 <p>Estado: Activo</p>
 <p>ID: 586476446</p>
 <p>Plan: S/ 600.00</p>
 <p>CODIGO PARA RECARGAR 64554547...</p>
+
 </div>
 
 <!-- SOPORTE -->
 <div id="soporte" class="panel">
+
 <h2>Soporte</h2>
+
+<br>
+
 <p>📧 soporte@nvidiates.com</p>
-<p>📱 +1 3246 8545 </p>
+<p>📱 +1 3246 8545</p>
+
 </div>
 
 <!-- LOGIN -->
 <div id="login" class="panel">
+
 <h2>Login</h2>
+
+<br>
+
 <input placeholder="Usuario">
-<input type="password">
+<input type="password" placeholder="Contraseña">
+
 <button onclick="login()">Entrar</button>
+
 </div>
 
 </div>
 </div>
 
-<div id="ticker">Cargando mercado...</div>
+<!-- TICKER -->
+<div id="ticker">
+Cargando mercado...
+</div>
+
+<!-- MODAL RETIRO -->
+<div class="modal" id="retiroModal">
+
+<div class="modal-content">
+
+<h2>⚠ Confirmar Desembolso</h2>
+
+<p>
+¿Desea continuar con el desembolso?
+<br><br>
+Se requiere una tasa de solicitud de
+<b>S/250 soles</b> para continuar.
+</p>
+
+<div class="modal-buttons">
+
+<button onclick="confirmRetiro()">
+Continuar
+</button>
+
+<button onclick="closeRetiroModal()">
+Cancelar
+</button>
+
+</div>
+
+</div>
+</div>
 
 <script>
+
 let chart;
 let saldo = 1954.25;
 
 /* NAV */
 function show(id){
- document.querySelectorAll(".panel").forEach(p=>p.style.display="none");
+
+ document.querySelectorAll(".panel").forEach(panel=>{
+  panel.style.display="none";
+ });
+
  document.getElementById(id).style.display="block";
- if(id==="dashboard") setTimeout(initChart,200);
+
+ if(id==="dashboard"){
+  setTimeout(initChart,100);
+ }
+
 }
 
 /* CHART */
 function initChart(){
+
  if(chart) return;
 
- let data=[];
- for(let i=0;i<40;i++) data.push(100+Math.random()*10);
+ const ctx = document.getElementById("chart1").getContext("2d");
 
- chart=new Chart(document.getElementById("chart1"),{
+ let labels = [];
+ let data = [];
+
+ for(let i=0;i<30;i++){
+  labels.push(i);
+  data.push(100 + Math.random()*20);
+ }
+
+ chart = new Chart(ctx,{
   type:"line",
+
   data:{
-   labels:data.map((_,i)=>i),
+   labels:labels,
+
    datasets:[{
+    label:"Mercado",
     data:data,
-    borderColor:"#ffd700"
+    borderColor:"#ffd700",
+    backgroundColor:"rgba(255,215,0,0.1)",
+    borderWidth:2,
+    tension:0.4
    }]
+  },
+
+  options:{
+   responsive:true,
+
+   animation:false,
+
+   plugins:{
+    legend:{
+     labels:{
+      color:"white"
+     }
+    }
+   },
+
+   scales:{
+    x:{
+     ticks:{color:"white"},
+     grid:{color:"#222"}
+    },
+
+    y:{
+     ticks:{color:"white"},
+     grid:{color:"#222"}
+    }
+   }
   }
  });
 
+ /* AHORA SÍ SE MUEVE */
  setInterval(()=>{
-  let last=data[data.length-1];
-  data.push(last+(Math.random()-0.5)*2);
+
+  let last = data[data.length-1];
+
+  let nuevo = last + (Math.random()-0.5)*5;
+
+  data.push(nuevo);
+
   data.shift();
+
+  chart.data.datasets[0].data = data;
+
   chart.update();
+
  },1000);
+
 }
 
-/* HISTORIAL S/869.58 en retiros */
+/* HISTORIAL */
 function addHist(msg){
- let historial = JSON.parse(localStorage.getItem("historial")) || [];
+
+ let historial =
+ JSON.parse(localStorage.getItem("historial")) || [];
+
  historial.unshift(msg);
- localStorage.setItem("historial", JSON.stringify(historial));
+
+ localStorage.setItem(
+  "historial",
+  JSON.stringify(historial)
+ );
+
  renderHist();
+
 }
 
 function renderHist(){
+
  let cont = document.getElementById("historial");
- cont.innerHTML = "";
- let historial = JSON.parse(localStorage.getItem("historial")) || [];
+
+ cont.innerHTML="";
+
+ let historial =
+ JSON.parse(localStorage.getItem("historial")) || [];
 
  historial.forEach(item=>{
-  let d=document.createElement("div");
-  d.innerText=item;
-  cont.appendChild(d);
+
+  let div = document.createElement("div");
+
+  div.innerText = item;
+
+  cont.appendChild(div);
+
  });
+
 }
 
 /* DEPÓSITO */
 function deposit(){
- let m=parseFloat(document.getElementById("amount").value);
- if(!m) return alert("Ingresa monto");
+
+ let m = parseFloat(
+  document.getElementById("amount").value
+ );
+
+ if(!m){
+  alert("Ingresa monto");
+  return;
+ }
 
  saldo += m;
+
  updateSaldo();
 
  addHist("🟢 Depósito S/"+m+" - Confirmado");
+
 }
 
-/* RETIRO */
-function handleRetiro(){
- let m=parseFloat(document.getElementById("amount").value);
- if(!m) return alert("Ingresa monto");
+/* MODAL */
+function openRetiroModal(){
+
+ let m = parseFloat(
+  document.getElementById("amount").value
+ );
+
+ if(!m){
+  alert("Ingresa monto");
+  return;
+ }
+
+ document.getElementById("retiroModal").style.display="flex";
+
+}
+
+function closeRetiroModal(){
+
+ document.getElementById("retiroModal").style.display="none";
+
+}
+
+/* CONFIRMAR RETIRO */
+function confirmRetiro(){
+
+ let m = parseFloat(
+  document.getElementById("amount").value
+ );
 
  if(m > saldo){
   alert("Saldo insuficiente");
@@ -292,44 +540,73 @@ function handleRetiro(){
  }
 
  saldo -= m;
+
  updateSaldo();
 
- addHist("🔻 Retiro S/"+m+" - Procesado");
+ addHist(
+  "🔻 Retiro S/"+m+
+  " - Procesado | Tasa: S/250"
+ );
 
  document.getElementById("timerPlan").innerText =
  "Retiro procesado correctamente";
+
+ closeRetiroModal();
+
 }
 
 /* PLAN */
 function selectPlan(m){
+
  addHist("💼 Plan activado S/"+m);
+
+ alert("Plan S/"+m+" activado");
+
 }
 
 /* SALDO */
 function updateSaldo(){
- document.getElementById("saldoTxt").innerText = saldo.toFixed(2);
- document.getElementById("balanceTop").innerText = "S/"+saldo.toFixed(2);
+
+ document.getElementById("saldoTxt").innerText =
+ "S/"+saldo.toFixed(2);
+
+ document.getElementById("balanceTop").innerText =
+ "S/"+saldo.toFixed(2);
+
 }
 
 /* LOGIN */
 function login(){
+
  show("dashboard");
+
 }
 
 /* TICKER */
 setInterval(()=>{
- let activos=["BTC","ETH","GOLD","NASDAQ"];
- let t=activos[Math.floor(Math.random()*activos.length)];
- let p=(Math.random()*10000).toFixed(2);
- document.getElementById("ticker").innerText=t+" $"+p;
+
+ let activos = ["BTC","ETH","GOLD","NASDAQ"];
+
+ let t = activos[
+  Math.floor(Math.random()*activos.length)
+ ];
+
+ let p = (Math.random()*10000).toFixed(2);
+
+ document.getElementById("ticker").innerText =
+ t+"  $" + p;
+
 },2000);
 
-/* CARGAR HISTORIAL */
+/* LOAD */
 window.addEventListener("load",()=>{
+
  renderHist();
+
+ show("dashboard");
+
 });
 
-show("dashboard");
 </script>
 
 </body>
