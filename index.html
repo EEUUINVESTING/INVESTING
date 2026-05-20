@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>NVDIATESss</title>
+<title>NVDIATES</title>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -30,8 +30,6 @@ body{
  height:100vh;
  overflow:hidden;
 }
-
-/* SIDEBAR */
 
 nav{
  width:220px;
@@ -66,15 +64,11 @@ nav button:hover{
  color:var(--yellow);
 }
 
-/* MAIN */
-
 .main{
  flex:1;
  display:flex;
  flex-direction:column;
 }
-
-/* TOPBAR */
 
 .topbar{
  background:#111;
@@ -84,8 +78,6 @@ nav button:hover{
  border-bottom:1px solid #222;
  font-weight:bold;
 }
-
-/* CONTENT */
 
 .content{
  flex:1;
@@ -97,15 +89,11 @@ nav button:hover{
  display:none;
 }
 
-/* GRID */
-
 .grid{
  display:grid;
  grid-template-columns:2fr 1fr;
  gap:15px;
 }
-
-/* CARD */
 
 .card{
  background:#111;
@@ -119,8 +107,6 @@ nav button:hover{
  margin-bottom:15px;
 }
 
-/* INPUT */
-
 input{
  width:100%;
  padding:12px;
@@ -130,8 +116,6 @@ input{
  color:white;
  margin:5px 0;
 }
-
-/* BUTTON */
 
 .btn{
  width:100%;
@@ -143,11 +127,6 @@ input{
  font-weight:bold;
  background:var(--yellow);
  color:black;
- transition:0.2s;
-}
-
-.btn:hover{
- opacity:0.9;
 }
 
 .btn-dark{
@@ -161,8 +140,6 @@ input{
  color:white;
 }
 
-/* HISTORIAL */
-
 #historial div{
  background:#222;
  padding:10px;
@@ -170,22 +147,6 @@ input{
  margin:5px 0;
  border-left:3px solid var(--yellow);
 }
-
-/* TICKER */
-
-#ticker{
- position:fixed;
- bottom:0;
- left:220px;
- width:calc(100% - 220px);
- background:#000;
- color:var(--yellow);
- padding:10px;
- border-top:1px solid #222;
- font-weight:bold;
-}
-
-/* MODAL */
 
 .modal{
  position:fixed;
@@ -209,17 +170,6 @@ input{
  text-align:center;
 }
 
-.modal-content h2{
- color:var(--yellow);
- margin-bottom:15px;
-}
-
-.modal-content p{
- color:#ccc;
- line-height:1.6;
- margin-bottom:20px;
-}
-
 .wallet-box{
  background:#222;
  padding:15px;
@@ -235,13 +185,22 @@ input{
  margin-top:10px;
 }
 
+#ticker{
+ position:fixed;
+ bottom:0;
+ left:220px;
+ width:calc(100% - 220px);
+ background:#000;
+ color:#ffd700;
+ padding:10px;
+ border-top:1px solid #222;
+}
+
 </style>
 
 </head>
 
 <body>
-
-<!-- SIDEBAR -->
 
 <nav>
 
@@ -271,11 +230,7 @@ NVDIATES
 
 </nav>
 
-<!-- MAIN -->
-
 <div class="main">
-
-<!-- TOPBAR -->
 
 <div class="topbar">
 
@@ -289,17 +244,11 @@ S/49,554.25
 
 </div>
 
-<!-- CONTENT -->
-
 <div class="content">
-
-<!-- DASHBOARD -->
 
 <div id="dashboard" class="panel">
 
 <div class="grid">
-
-<!-- GRAFICO -->
 
 <div class="card">
 
@@ -310,8 +259,6 @@ S/49,554.25
 <canvas id="chart1"></canvas>
 
 </div>
-
-<!-- OPERACIONES -->
 
 <div class="card">
 
@@ -337,16 +284,12 @@ id="amount"
 placeholder="Ingrese monto"
 />
 
-<!-- DEPOSITO -->
-
 <button
 class="btn"
 onclick="deposit()"
 >
 🟢 Depositar
 </button>
-
-<!-- RETIRO -->
 
 <button
 class="btn"
@@ -355,21 +298,16 @@ onclick="openRetiroModal()"
 🔻 Retirar
 </button>
 
-<!-- BOTON ACTIVACION -->
-
 <button
 class="btn btn-dark"
 onclick="openWallet()"
 >
-💳 Pagar tasa de activación $220.00
+💳 Wallet
 </button>
 
 <p
 id="timerPlan"
-style="
-margin-top:15px;
-color:#ffd700;
-"
+style="margin-top:15px;color:#ffd700;"
 >
 Sistema activo
 </p>
@@ -388,8 +326,6 @@ Sistema activo
 
 </div>
 
-<!-- PLANES -->
-
 <div id="plans" class="panel">
 
 <h2>
@@ -398,21 +334,19 @@ Planes
 
 <br>
 
-<button class="btn" onclick="selectPlan(1500)">
+<button class="btn">
 Plan 1500
 </button>
 
-<button class="btn" onclick="selectPlan(700)">
+<button class="btn">
 Plan 700
 </button>
 
-<button class="btn" onclick="selectPlan(5000)">
+<button class="btn">
 VIP
 </button>
 
 </div>
-
-<!-- PERFIL -->
 
 <div id="perfil" class="panel">
 
@@ -448,8 +382,6 @@ CODIGO PARA RECARGAR 64554547...
 
 </div>
 
-<!-- SOPORTE -->
-
 <div id="soporte" class="panel">
 
 <h2>
@@ -467,8 +399,6 @@ Soporte
 </p>
 
 </div>
-
-<!-- LOGIN -->
 
 <div id="login" class="panel">
 
@@ -498,13 +428,11 @@ Entrar
 
 </div>
 
-<!-- TICKER -->
-
 <div id="ticker">
-Cargando mercado...
+BTC $64,000.68
 </div>
 
-<!-- MODAL RETIRO -->
+<!-- RETIRO -->
 
 <div
 class="modal"
@@ -514,43 +442,25 @@ id="retiroModal"
 <div class="modal-content">
 
 <h2>
-⚠ Confirmar Desembolso
+⚠ Retiro
 </h2>
 
 <p>
-Para continuar con el desembolso
-se requiere una tasa de activación
-de <b style="color:#ffd700;">
-220 dólares
-</b>.
+Primero tienes que depositar mínimo 752 soles.
 </p>
 
 <button
 class="btn"
-onclick="confirmRetiro()"
->
-✅ Continuar desembolso
-</button>
-
-<button
-class="btn btn-dark"
-onclick="openWallet()"
->
-💳 Pagar tasa $80
-</button>
-
-<button
-class="btn btn-red"
 onclick="closeRetiroModal()"
 >
-❌ Cancelar
+Aceptar
 </button>
 
 </div>
 
 </div>
 
-<!-- MODAL WALLET -->
+<!-- WALLET -->
 
 <div
 class="modal"
@@ -560,18 +470,13 @@ id="walletModal"
 <div class="modal-content">
 
 <h2>
-💳 Wallet de Activación
+💳 Wallet USDT
 </h2>
-
-<p>
-Seleccione el método de pago
-para continuar con la activación.
-</p>
 
 <div class="wallet-box">
 
 <p>
-USDT Wallet: TB1vZrQ5RFKTsfZc3VeckfPxf4tS6pAhF5
+Wallet:
 </p>
 
 <div class="wallet-address">
@@ -589,7 +494,7 @@ placeholder="Ingrese HASH / TXID"
 class="btn"
 onclick="confirmWalletPayment()"
 >
-✅ Confirmar Pago
+✅ Confirmar
 </button>
 
 <button
@@ -605,13 +510,11 @@ onclick="closeWallet()"
 
 <script>
 
-/* VARIABLES */
-
-let saldo = 1954.25;
+let saldo = 49554.25;
 
 let chart;
 
-/* MOSTRAR PANEL */
+/* PANEL */
 
 function showPanel(id){
 
@@ -635,7 +538,7 @@ function showPanel(id){
 
 }
 
-/* GRAFICO */
+/* CHART */
 
 function initChart(){
 
@@ -647,7 +550,7 @@ function initChart(){
 
  let data = [];
 
- for(let i=0;i<40;i++){
+ for(let i=0;i<30;i++){
 
   data.push(
    100 + Math.random()*20
@@ -681,58 +584,15 @@ function initChart(){
 
    responsive:true,
 
-   animation:false,
-
    plugins:{
     legend:{
      display:false
     }
-   },
-
-   scales:{
-
-    x:{
-     ticks:{
-      color:"white"
-     },
-     grid:{
-      color:"#222"
-     }
-    },
-
-    y:{
-     ticks:{
-      color:"white"
-     },
-     grid:{
-      color:"#222"
-     }
-    }
-
    }
 
   }
 
  });
-
- setInterval(()=>{
-
-  let last =
-  data[data.length-1];
-
-  let next =
-  last + (Math.random()-0.5)*5;
-
-  data.push(next);
-
-  data.shift();
-
-  chart.data.datasets[0].data =
-  data;
-
-  chart.update();
-
- },1000);
 
 }
 
@@ -761,7 +621,7 @@ function renderHist(){
  let cont =
  document.getElementById("historial");
 
- cont.innerHTML = "";
+ cont.innerHTML="";
 
  let historial =
  JSON.parse(
@@ -773,7 +633,7 @@ function renderHist(){
   let div =
   document.createElement("div");
 
-  div.innerText = item;
+  div.innerText=item;
 
   cont.appendChild(div);
 
@@ -781,7 +641,7 @@ function renderHist(){
 
 }
 
-/* ACTUALIZAR SALDO */
+/* ACTUALIZAR */
 
 function updateSaldo(){
 
@@ -795,7 +655,7 @@ function updateSaldo(){
 
 }
 
-/* DEPOSITAR */
+/* DEPOSITO */
 
 function deposit(){
 
@@ -806,56 +666,26 @@ function deposit(){
 
  if(isNaN(amount) || amount<=0){
 
-  alert("Ingresa un monto válido");
+  alert(
+   "Ingresa un monto válido"
+  );
 
   return;
 
  }
 
- saldo += amount;
-
- updateSaldo();
-
- addHist(
-  "🟢 Depósito S/" +
-  amount.toFixed(2) +
-  " - Confirmado"
+ localStorage.setItem(
+  "pendingDeposit",
+  amount
  );
 
- alert(
-  "Depósito realizado correctamente"
- );
+ openWallet();
 
 }
 
 /* RETIRO */
 
 function openRetiroModal(){
-
- let amount =
- parseFloat(
-  document.getElementById("amount").value
- );
-
- if(isNaN(amount) || amount<=0){
-
-  alert("Ingresa un monto válido");
-
-  return;
-
- }
-
- // VALIDACION NUEVA
-
- if(saldo < 700){
-
-  alert(
-   "Primero tienes que depositar 700 soles"
-  );
-
-  return;
-
- }
 
  document.getElementById("retiroModal")
  .style.display="flex";
@@ -871,7 +701,7 @@ function closeRetiroModal(){
 
 }
 
-/* ABRIR WALLET */
+/* WALLET */
 
 function openWallet(){
 
@@ -880,8 +710,6 @@ function openWallet(){
 
 }
 
-/* CERRAR WALLET */
-
 function closeWallet(){
 
  document.getElementById("walletModal")
@@ -889,7 +717,7 @@ function closeWallet(){
 
 }
 
-/* CONFIRMAR WALLET */
+/* CONFIRMAR */
 
 function confirmWalletPayment(){
 
@@ -899,83 +727,49 @@ function confirmWalletPayment(){
  if(txid===""){
 
   alert(
-   "Ingrese el HASH / TXID"
+   "Ingrese HASH / TXID"
   );
 
   return;
 
  }
 
- addHist(
-  "💳 Tasa de activación $80 enviada | TXID: " + txid
+ let pendingDeposit =
+ parseFloat(
+  localStorage.getItem("pendingDeposit")
  );
 
- alert(
-  "Pago enviado correctamente"
- );
+ // SOLO AGREGA EN DEPOSITO
+
+ if(!isNaN(pendingDeposit)){
+
+  saldo += pendingDeposit;
+
+  updateSaldo();
+
+  addHist(
+   "🟢 Depósito S/" +
+   pendingDeposit.toFixed(2) +
+   " | TXID: " + txid
+  );
+
+  localStorage.removeItem(
+   "pendingDeposit"
+  );
+
+  alert(
+   "Depósito enviado correctamente"
+  );
+
+ }else{
+
+  addHist(
+   "💳 Wallet verificada | TXID: " + txid
+  );
+
+ }
 
  closeWallet();
-
-}
-
-/* CONFIRMAR RETIRO */
-
-function confirmRetiro(){
-
- let amount =
- parseFloat(
-  document.getElementById("amount").value
- );
-
- if(isNaN(amount) || amount<=0){
-
-  alert("Monto inválido");
-
-  return;
-
- }
-
- if(amount > saldo){
-
-  alert("Saldo insuficiente");
-
-  return;
-
- }
-
- saldo -= amount;
-
- updateSaldo();
-
- addHist(
-  "🔻 Retiro S/" +
-  amount.toFixed(2) +
-  " - Procesado"
- );
-
- document.getElementById("timerPlan")
- .innerText =
- "Retiro procesado correctamente";
-
- alert(
-  "Desembolso enviado correctamente"
- );
-
- closeRetiroModal();
-
-}
-
-/* PLANES */
-
-function selectPlan(plan){
-
- addHist(
-  "💼 Plan activado S/" + plan
- );
-
- alert(
-  "Plan activado correctamente"
- );
 
 }
 
@@ -989,42 +783,13 @@ function login(){
 
 }
 
-/* TICKER */
-
-setInterval(()=>{
-
- let activos = [
-
-  "BTC",
-  "ETH",
-  "GOLD",
-  "NASDAQ",
-  "USD/JPY"
-
- ];
-
- let activo =
- activos[
-  Math.floor(
-   Math.random()*activos.length
-  )
- ];
-
- let precio =
- (Math.random()*10000)
- .toFixed(2);
-
- document.getElementById("ticker")
- .innerText =
- activo + " $" + precio;
-
-},2000);
-
 /* LOAD */
 
 window.onload = function(){
 
  renderHist();
+
+ updateSaldo();
 
  showPanel("dashboard");
 
