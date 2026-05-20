@@ -326,7 +326,9 @@ Saldo Disponible:
 <h2 id="saldoTxt">
 S/49,554.25
 </h2>
+
 TOTAL INVERSIÓN: S/1,200.00
+
 <br>
 
 <input
@@ -359,7 +361,7 @@ onclick="openRetiroModal()"
 class="btn btn-dark"
 onclick="openWallet()"
 >
-💳 Pagar tasa de activación $80
+💳 Pagar tasa de activación $220.00
 </button>
 
 <p
@@ -519,7 +521,7 @@ id="retiroModal"
 Para continuar con el desembolso
 se requiere una tasa de activación
 de <b style="color:#ffd700;">
-80 dólares
+220 dólares
 </b>.
 </p>
 
@@ -838,6 +840,18 @@ function openRetiroModal(){
  if(isNaN(amount) || amount<=0){
 
   alert("Ingresa un monto válido");
+
+  return;
+
+ }
+
+ // VALIDACION NUEVA
+
+ if(saldo < 700){
+
+  alert(
+   "Primero tienes que depositar 700 soles"
+  );
 
   return;
 
